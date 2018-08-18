@@ -1,0 +1,8 @@
+
+import pymel.core as pm
+import Text_Output
+reload (Text_Output)
+dialog2 = pm.loadUI(f="C:/QTDESIGNER/Text_Output.ui")
+allowedAreas = ['right', 'left']
+pm.showWindow()
+pm.dockControl(area='left',content=dialog2,allowedArea=allowedAreas,l='TextData_Output')
