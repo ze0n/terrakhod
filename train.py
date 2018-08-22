@@ -6,6 +6,7 @@ from os import listdir
 from skimage.io import imread, imshow
 from skimage.transform import resize
 from sklearn.preprocessing import LabelEncoder
+from skimage.color import rgb2gray
 import numpy as np
 from matplotlib import pyplot as plt
 from tensorflow.python import keras
@@ -20,11 +21,11 @@ from sklearn.model_selection import train_test_split
 
 IMG_SIZE = (128,128)
 BATCH_SIZE = 32
-EPOCHS = 10
+EPOCHS = 100
 
 def main():
   # Loads ims and labels
-  imgs, labels = load_imgs_and_labels()
+  imgs, labels = load_imgs_and_labels(debug=False)
   nb_different_labels = len(set(labels))
 
   label_encoder = LabelEncoder()
@@ -55,15 +56,20 @@ def load_imgs_and_labels(labels_dirname='DatasetGeneration/RenderedDataLabels', 
     img = imread(join(img_dirname, img_file))
     # The original images are 1024x1280, way too big for the raspberry
     # I resize as in donkeycay: https://github.com/wroscoe/donkey/blob/dev/donkeycar/util/img.py
+    # Obtained shape is (IMG_SIZE, IMG_SIZE, 3)
     img_resized = resize(img, IMG_SIZE)
-    imgs.append(img_resized)
+    # Convert to gray scale; obtained shape is (IMG_SIZE, IMG_SIZE)
+    img_gray = rgb2gray(img_resized)
+    # Need to add a dimension in order to get shape (IMG_SIZE, IMG_SIZE, 1), because the CNN
+    # needs data with 3 or more dimensions
+    imgs.append(img_gray[..., np.newaxis])
     # Get the corresponding label
     label = df.loc[img_file,'Label']
     labels.append(label)
 
     # I show the images for debugging purposes
     if ( debug ):
-      imshow(img)
+      imshow(img_gray)
       plt.title(img_file + ": " + label)
       plt.show()
 
@@ -80,7 +86,7 @@ def get_model(output_size):
   model = keras.models.Sequential()
   # Define here your model
 
-  model.add(Conv2D(filters=32, kernel_size=3, padding="same", input_shape=(IMG_SIZE[0], IMG_SIZE[1], 3), activation='relu'))  # first layer needs to define "input_shape"
+  model.add(Conv2D(filters=32, kernel_size=3, padding="same", input_shape=(IMG_SIZE[0], IMG_SIZE[1], 1), activation='relu'))  # first layer needs to define "input_shape"
   #model.add(LeakyReLU(0.1))
   model.add(MaxPooling2D(pool_size = (2,2)))    
   model.add(Conv2D(filters=64, kernel_size=2, padding="same", activation='relu'))
