@@ -62,7 +62,8 @@ def load_imgs_and_labels(labels_dirname='DatasetGeneration/RenderedDataLabels', 
     img_gray = rgb2gray(img_resized)
     # Need to add a dimension in order to get shape (IMG_SIZE, IMG_SIZE, 1), because the CNN
     # needs data with 3 or more dimensions
-    imgs.append(img_gray[..., np.newaxis])
+    img_reshaped = img_gray[..., np.newaxis]
+    imgs.append(img_reshaped)
     # Get the corresponding label
     label = df.loc[img_file,'Label']
     labels.append(label)
@@ -100,7 +101,7 @@ def get_model(output_size):
   model.add(Dense(500, activation='relu'))
   #model.add(LeakyReLU(0.1))
   model.add(Dropout(0.25))
-  model.add(Dense(output_size))  
+  model.add(Dense(output_size, activation='softmax'))  
 
   return model
 
