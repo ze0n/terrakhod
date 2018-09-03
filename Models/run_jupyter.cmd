@@ -1,0 +1,1 @@
+start C:\Anaconda\pythonw.exe C:\Anaconda\cwp.py C:\Anaconda "C:/Anaconda/python.exe" "C:/Anaconda/Scripts/jupyter-notebook-script.py" %~dp0
