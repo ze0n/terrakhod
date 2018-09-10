@@ -1,13 +1,7 @@
 
 # coding: utf-8
 
-# In[8]:
-
-
-get_ipython().system('pip install h5py')
-
-
-# In[1]:
+# In[13]:
 
 
 from os.path import isfile, join
@@ -29,7 +23,7 @@ from tensorflow.python.keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
 
 
-# In[2]:
+# In[14]:
 
 
 IMG_SIZE = (90,180)
@@ -37,19 +31,29 @@ BATCH_SIZE = 32
 EPOCHS = 100
 
 
-# In[35]:
+# In[18]:
 
 
-im = imread(join('../DatasetGeneration/SampleData/1', 'drum.0023.jpg'))
+labels_dirname='../DatasetGeneration/SampleData/1'
+img_dirname='../DatasetGeneration/SampleData/1'
+csv_file = join(labels_dirname, 'data.csv')
+df = pd.read_csv(csv_file, index_col=0)
+df.head(5)
 
 
-# In[38]:
+# In[19]:
 
 
-im.shape[0]/2
+df.Label.unique()
 
 
-# In[16]:
+# In[20]:
+
+
+labelMapping = {'Left5': -0.9, 'Left4': -0.8, 'Left3': -0.7, 'Left2': -0.6, 'Left1': -0.5, 'Straight': 0.0, 'Right1': 0.5, 'Right2': 0.6, 'Right3': 0.7, 'Right4': 0.8, 'Right5': 0.9}
+
+
+# In[21]:
 
 
 def load_imgs_and_labels(
@@ -86,7 +90,7 @@ def load_imgs_and_labels(
     imgs.append(img_reshaped)
     # Get the corresponding label
     label = df.loc[img_file,'Label']
-    labels.append(label)
+    labels.append(labelMapping[label])
 
     # I show the images for debugging purposes
     if ( debug ):
@@ -100,7 +104,7 @@ def load_imgs_and_labels(
   return imgs_np, labels
 
 
-# In[17]:
+# In[26]:
 
 
 def get_model(output_size):
@@ -111,10 +115,10 @@ def get_model(output_size):
   model = keras.models.Sequential()
   # Define here your model
 
-  model.add(Conv2D(filters=32, kernel_size=3, padding="same", input_shape=(IMG_SIZE[0], IMG_SIZE[1], 1), activation='relu'))  # first layer needs to define "input_shape"
+  model.add(Conv2D(filters=32, kernel_size=5, padding="same", input_shape=(IMG_SIZE[0], IMG_SIZE[1], 1), activation='relu'))  # first layer needs to define "input_shape"
   #model.add(LeakyReLU(0.1))
   model.add(MaxPooling2D(pool_size = (2,2)))    
-  model.add(Conv2D(filters=64, kernel_size=2, padding="same", activation='relu'))
+  model.add(Conv2D(filters=64, kernel_size=3, padding="same", activation='relu'))
   #model.add(LeakyReLU(0.1))
   model.add(MaxPooling2D(pool_size = (2,2)))    
   model.add(Conv2D(filters=128, kernel_size=2, padding="same", activation='relu'))
@@ -125,23 +129,28 @@ def get_model(output_size):
   model.add(Dense(500, activation='relu'))
   #model.add(LeakyReLU(0.1))
   model.add(Dropout(0.25))
-  model.add(Dense(output_size, activation='softmax'))  
+  model.add(Dense(output_size, activation='sigmoid'))  
 
   return model
 
 
-# In[18]:
+# In[27]:
 
 
 def train_model(model, imgs, labels, model_name=None):
 
   imgs_train, imgs_val, labels_train, labels_val = train_test_split(imgs, labels, test_size=0.1)
 
-  model.compile(
-      loss='categorical_crossentropy', 
-      metrics=['accuracy'],
-      optimizer=Adam()
-  )
+  #model.compile(
+  #    loss='categorical_crossentropy', 
+  #    metrics=['accuracy'],
+  #    optimizer=Adam()
+  #)
+  
+  model.compile(loss='mean_squared_error',
+              optimizer=Adam(),
+              metrics=['mae', 'acc'])
+  
 
   # Choose optimizer, compile model and run training
   earlyStopping = EarlyStopping(monitor='val_loss',
@@ -167,7 +176,7 @@ def train_model(model, imgs, labels, model_name=None):
       )  # starts training
 
 
-# In[20]:
+# In[28]:
 
 
 # Loads ims and labels
@@ -175,29 +184,15 @@ imgs, labels = load_imgs_and_labels(debug=False)
 nb_different_labels = len(set(labels))
 
 
-# In[21]:
+# In[12]:
 
 
-label_encoder = LabelEncoder()
-labels_as_integers = label_encoder.fit_transform(labels)
-labels_one_hot_encoded = to_categorical(labels_as_integers)
+labels
 
 
-# In[22]:
+# In[29]:
 
 
-labels_one_hot_encoded
-
-
-# In[23]:
-
-
-# Initialises the model
-model = get_model( nb_different_labels )
-
-
-# In[24]:
-
-
-train_model(model, imgs, labels_one_hot_encoded, model_name='Simple')
+model = get_model( 1 )
+train_model(model, imgs, labels, model_name='Simple')
 
