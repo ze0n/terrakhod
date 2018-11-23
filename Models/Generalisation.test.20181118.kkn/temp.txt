@@ -1,0 +1,6 @@
+def classify(val):
+    ...:     if(val < -0.5): return [0, 0, 0, 0, 1]
+    ...:     if(val < -0.05): return [0, 0, 0, 1, 0]
+    ...:     if(val < 0.05): return [0, 0, 1, 0, 0]
+    ...:     if(val < 0.5): return [0, 1, 0, 0, 0]
+    ...:     return [1, 0, 0, 0, 0]
