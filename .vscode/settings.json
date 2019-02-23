@@ -1,6 +1,0 @@
-{
-    "python.jediEnabled": false,
-    "python.pythonPath": "/home/marc/anaconda3/envs/keras1_2/bin/python",
-    "python.linting.pylintEnabled": true,
-    "git.ignoreLimitWarning": true
-}
