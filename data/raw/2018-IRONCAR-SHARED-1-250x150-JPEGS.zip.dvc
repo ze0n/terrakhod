@@ -1,0 +1,7 @@
+md5: 4b3c4ba7741891386250e48fdd3baf5d
+outs:
+- cache: true
+  md5: 3f57ce4ee0c738bcae4627c40bbf23ac
+  metric: false
+  path: data/raw/2018-IRONCAR-SHARED-1-250x150-JPEGS.zip
+wdir: ..\..
