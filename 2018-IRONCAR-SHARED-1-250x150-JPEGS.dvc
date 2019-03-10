@@ -1,0 +1,11 @@
+cmd: unzip data\raw\2018-IRONCAR-SHARED-1-250x150-JPEGS.zip -d data\raw\2018-IRONCAR-SHARED-1-250x150-JPEGS\
+deps:
+- md5: 3f57ce4ee0c738bcae4627c40bbf23ac
+  path: data/raw/2018-IRONCAR-SHARED-1-250x150-JPEGS.zip
+md5: 026d0329cd4b0c57810d26d921571618
+outs:
+- cache: true
+  md5: 3606c05927c273b05d015c0ba033f1f7.dir
+  metric: false
+  path: data/raw/2018-IRONCAR-SHARED-1-250x150-JPEGS
+wdir: .
