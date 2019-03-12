@@ -2,3 +2,5 @@
 .envtf2
 *.pyc
 *.pyo
+
+.ipynb_checkpoints
