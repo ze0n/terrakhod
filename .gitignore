@@ -1,2 +1,4 @@
 .vscode
 .envtf2
+*.pyc
+*.pyo
