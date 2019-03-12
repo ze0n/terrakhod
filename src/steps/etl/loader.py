@@ -1,3 +1,3 @@
 class LoaderBase():
-    def log(self, str):
-        print(str)
+    def log(self, *p):
+        print(*p)

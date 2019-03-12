@@ -15,16 +15,22 @@ class AxionautLoader(LoaderBase):
     
     def load(self):
         xfilePath = os.path.join(self.rootDir, self.xfile)
-        self.log("Loading {}".format(xfilePath))
+        yfilePath = os.path.join(self.rootDir, self.yfile)
+        
         X = np.load(xfilePath)
         Xshape = X.shape
-        print("X shape", X.shape)        
-        
-        yfilePath = os.path.join(self.rootDir, self.yfile)
-        self.log("Loading {}".format(yfilePath))
+
         Y = np.load(yfilePath)
         Yshape = Y.shape
-        print("Y shape", Y.shape)          
+
+        self.log(" "+"-"*80)
+        self.log(" "+">> ", self.rootDir)
+        self.log(" "+"-"*80)
+        self.log(" X: {}".format(xfilePath))
+        self.log(" Y: {}".format(yfilePath))
+        self.log(" X shape:", X.shape)        
+        self.log(" Y shape:", Y.shape)          
+        self.log(" "+"-"*80)
         
         self.log("Cleaning X")
         del X
