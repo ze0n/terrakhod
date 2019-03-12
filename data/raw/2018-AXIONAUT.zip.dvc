@@ -1,7 +1,0 @@
-md5: 9103ce98a7824c3ba37f7dc051835339
-outs:
-- cache: true
-  md5: 46353287f31a0a520b15f1984a5c08b9
-  metric: false
-  path: data/raw/2018-AXIONAUT.zip
-wdir: ..\..
