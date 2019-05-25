@@ -1,8 +1,24 @@
 {% extends 'base.html' %}
 
 {% block header %}
-
 {% endblock %}
+
+{% block nav %}
+
+  <li class="nav-item">
+    <div class='info'>
+      <h3>Dataset info</h3>
+      <p>Samples: <b>{{dataset.X | length}}</b></p>
+      <p>Size: <b>{{dataset.X.shape[1]}} x {{dataset.X.shape[2]}}</b></p>
+    </div>
+  </li>
+
+  <li class="nav-item">
+    <a class="btn btn-primary" href="#" onclick="save_dataset()">Save</a>
+  </li>
+{% endblock %}
+
+
 
 {% block content %}
   <script type="text/javascript">
@@ -24,7 +40,7 @@
             url: '/labeler/cursor_next',
             async: true,
             success: function () {
-              window.location.assign("/labeler")
+              window.location.assign("/viewer")
               var target = document.getElementById('contento');
               var spinner = new Spinner(opts).spin(target);
             }
@@ -38,7 +54,7 @@
             url: '/labeler/cursor_prev',
             async: true,
             success: function () {
-              window.location.assign("/labeler")
+              window.location.assign("/viewer")
               var target = document.getElementById('contento');
               var spinner = new Spinner(opts).spin(target);
             }
@@ -52,9 +68,38 @@
             url: '/labeler/change_dataset?dataset='+dataset,
             async: true,
             success: function () {
-              window.location.assign("/labeler")
+              window.location.assign("/viewer")
               var target = document.getElementById('contento');
               var spinner = new Spinner(opts).spin(target);
+            }
+        });
+    }
+
+
+    function correct_label(dataset, index, label, elmnt){
+       $.ajax
+        ({
+            type: "GET",
+            url: '/labeler/correct_label?dataset='+dataset+"&imageIndex="+index+"&newLabel="+label,
+            async: false,
+            success: function () {
+              $(elmnt).addClass("prediction-class-corrected");
+              // window.location.assign("/viewer")
+              //var target = document.getElementById('contento');
+              //var spinner = new Spinner(opts).spin(target);
+            }
+        });
+    }
+
+
+    function save_dataset(){
+       $.ajax
+        ({
+            type: "GET",
+            url: '/labeler/save',
+            async: false,
+            success: function () {
+              alert("Saved");
             }
         });
     }
@@ -62,7 +107,7 @@
 
   <div class="container-fluid">
   <div class="row" style="height: 100%">
-    <div class="col-md-3 myNavigation" style="height: 100%">
+<!--     <div class="col-md-3 myNavigation" style="height: 100%">
       <h3>Datasets</h3>
       <ul class="datasets_list">
         {% for d in datasets %}
@@ -77,7 +122,14 @@
       <p>Size: <b>{{dataset.X.shape[1]}} x {{dataset.X.shape[2]}}</b></p>
 
     </div>
-    <div class="col-md-9" id="contento">
+ -->
+    <div class="col-md-12" id="contento">
+
+        <div class="cursor">
+          <a onclick="cursor_prev()" class="btn btn-primary">&larr; Prev</a>
+          <span class="current">{{cursor_current}}</span>
+          <a onclick="cursor_next()" class="btn btn-primary">Next &rarr;</a>
+        </div>
 
       {% for c in cursor %}
 
@@ -92,8 +144,9 @@
           {% if label != 'corr' %}
 
           {% for class in range(5) %}
-            <div class="viewer-prediction-class {{'prediction-class-selected' if c.labels[label][class] == 1 else ''}}">
+            <div class="viewer-prediction-class {{'prediction-class-selected' if c.labels[label][class] == 1 else ''}} {{'prediction-class-corrected' if c.labels['corr'][class] == 1 else ''}}" onclick="correct_label('{{dataset.name}}', {{c.index}}, {{class}}, this)">
               {{'o' if c.labels[label][class] == 1 else '&nbsp;' | safe}}
+              {{'c' if c.labels['corr'][class] == 1 else '' | safe}}
             </div>
 
           {% endfor %}
@@ -108,9 +161,6 @@
       </div>
 
       {% endfor %}
-
-
-        }
 
     </div>
   </div>

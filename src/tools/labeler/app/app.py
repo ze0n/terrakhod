@@ -60,6 +60,20 @@ def action_cursor_next():
     Lr.cursor_next()
     return ""
 
+@app.route("/labeler/save")
+def save():
+    Lr.save()
+    return "ok"
+
+
+@app.route("/labeler/correct_label")
+def correct_label():
+    dataset = request.args.get('dataset')
+    imageIndex = int(request.args.get('imageIndex'))
+    newLabel = int(request.args.get('newLabel'))
+    Lr.correct_label(dataset, imageIndex, newLabel)
+    return "OK"
+
 
 @app.route("/viewer")
 def viewer():

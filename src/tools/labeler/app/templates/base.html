@@ -54,6 +54,44 @@
       <li class="nav-item">
         <a class="nav-link" href="/viewer">Viewer</a>
       </li>
+
+      <li class="nav-item">
+      </li>
+
+      <li class="nav-item dropdown">
+        <div class='info'>
+          Datasets
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {% for d in datasets %}
+            {% if d.name == dataset.name: %}
+              <span>{{d.name}}</span>
+            {% endif %}
+          {% endfor %}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+            {% for d in datasets %}
+              <a class="dropdown-item {{'selected' if d.name == dataset.name else ''}}" href="#" onclick="change_dataset('{{d.name}}')">{{d.name}}</a>
+            {% endfor %}
+
+        </div>
+        </div>
+      </li>
+
+
+      {% block nav %}{% endblock %} 
+
+<!--       <li>
+        <h3>Datasets</h3>
+        <ul class="datasets_list">
+        {% for d in datasets %}
+          <li class="{{'selected' if d.name == dataset.name else ''}}">
+            <a class="dataset" href="#" onclick="change_dataset('{{d.name}}')">{{d.name}}</a>
+          </li>
+        {% endfor %}
+        </ul>
+      </li>
+ -->
     </ul>
   </div>
 </nav>

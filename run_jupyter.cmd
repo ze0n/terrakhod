@@ -1,2 +1,2 @@
-venv-activate
-python "C:/Anaconda3/Scripts/jupyter-notebook-script.py" ./
+call venv-activate
+".\.envtf2\Scripts\jupyter-notebook.exe" .\

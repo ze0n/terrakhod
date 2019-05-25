@@ -49,6 +49,8 @@ class Fullscreen_Window:
         window.title("Welcome to LikeGeeks app")
         Label(window, text="Settings").grid(row=0)
 
+        window.configure(background="Gray")
+
         Label(window, text="Databases").grid(row=2)
         listboxDatabases = Listbox(window)
         listboxDatabases.grid(row=3)
@@ -56,7 +58,7 @@ class Fullscreen_Window:
         for item in ["one", "two", "three", "four"]:
             listboxDatabases.insert(END, item)
 
-        Label(window, text="Datasets").grid(row=4)
+        Label(window, text="Dataset").grid(row=4)
         listboxDatasets = Listbox(window)
         listboxDatasets.grid(row=5)
 
@@ -64,6 +66,19 @@ class Fullscreen_Window:
             listboxDatasets.insert(END, item)
 
         Separator(orient="vertical").grid(column=1)
+
+        FMas = Frame(window)
+        FMas.grid(column=2, row=0, sticky=(N,E,S,W))
+
+        FMas.grid_rowconfigure(1, weight=1)
+        FMas.grid_columnconfigure(2, weight=1)
+
+        L1 = Label(FMas, text="Frame 1 Contents")
+        L1.grid(row=0, column=0)
+
+        Can1 = Canvas(FMas, bg="Yellow")
+        Can1.grid(row=1, column=0, sticky=(N,W))
+
 
     def __init__(self):
         self.tk = Tk()

@@ -118,6 +118,11 @@ a.dataset {
     min-width: 50px;
 }
 
+.cursor {
+    text-align: center;
+    padding: 10px;
+}
+
 
 .image-container {
     padding: 50px;
@@ -146,6 +151,10 @@ a.dataset {
     background-color: red;
 }
 
+.prediction-class-corrected {
+    background-color: yellow;
+}
+
 h3 {
     clear: both;
 }
@@ -161,4 +170,10 @@ h3 {
 .viewer-image-container {
     float: left;
     padding: 5px;
+}
+
+
+
+.info {
+    color: white;
 }

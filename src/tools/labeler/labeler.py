@@ -127,11 +127,16 @@ class Labeler:
             im = self.show_image(self.current_position)
             labels = self.get_labels(self.current_position)
             return {
+                "index": self.current_position,
                 "image": im,
                 "labels": labels
             }
         else:
-            ret = list(map(lambda i: {"image": self.show_image(i), "labels": self.get_labels(i) }, self.cursor))
+            ret = list(map(lambda i: {
+                "index": i,
+                "image": self.show_image(i), 
+                "labels": self.get_labels(i) 
+                }, self.cursor))
             return ret
 
     def show_image(self, index):
@@ -163,6 +168,17 @@ class Labeler:
         #    ret[model] = render_predicted_label(model)
         return ret
 
+    def correct_label(self, dataset, imageIndex, newLabel):
+        print("old: ", self.dataset.C[imageIndex])
+        new = np.zeros(5)
+        new[newLabel] = 1
+        print("new: ", new)
+        self.dataset.C[imageIndex] = new
+        return "OK"
+
+    def save(self):
+        self.dataset.save()
+        return "ok"
 
     # def render_labels(self, im, labels):
     #     piece_size = 20
