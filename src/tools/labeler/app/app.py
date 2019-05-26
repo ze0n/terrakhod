@@ -78,7 +78,7 @@ def correct_label():
 @app.route("/viewer")
 def viewer():
 
-    Lr.cursor_size = 100
+    Lr.cursor_size = 200
     #Lr.current_position = 0
     Lr.cursor_next(True)
 

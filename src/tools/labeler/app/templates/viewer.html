@@ -22,17 +22,28 @@
 
 {% block content %}
   <script type="text/javascript">
-/*    document.addEventListener('keydown', (event) => {
+
+    document.addEventListener('keydown', (event) => {
       const keyName = event.key;
 
       if(keyName === "ArrowRight"){
-        cursor_next();
+        focus_next();
       }else if(keyName === "ArrowLeft"){
-        cursor_prev();
+        focus_prev();
+      }else if(keyName === "1"){
+        correct_label("{{dataset.name}}", focus_index, "0", $(".focus .label0")[0]);
+      }else if(keyName === "2"){
+        correct_label("{{dataset.name}}", focus_index, "1", $(".focus .label1")[0]);
+      }else if(keyName === "3"){
+        correct_label("{{dataset.name}}", focus_index, "2", $(".focus .label2")[0]);
+      }else if(keyName === "4"){
+        correct_label("{{dataset.name}}", focus_index, "3", $(".focus .label3")[0]);
+      }else if(keyName === "5"){
+        correct_label("{{dataset.name}}", focus_index, "4", $(".focus .label4")[0]);
       }
 
     }, false);
-*/
+
     function cursor_next(){
        $.ajax
         ({
@@ -75,6 +86,23 @@
         });
     }
 
+    var focus_index = {{cursor_current}}-1;
+
+    function focus_next(){
+      $(".focus").removeClass("focus");
+      focus_index++;
+      $("#focus-"+focus_index).addClass("focus");
+    }
+
+    function focus_prev(){
+      if(focus_index !== {{cursor_current-1}}){
+        $(".focus").removeClass("focus");
+        focus_index--;
+        $("#focus-"+focus_index).addClass("focus");
+      }
+    }
+
+    focus_next();
 
     function correct_label(dataset, index, label, elmnt){
        $.ajax
@@ -133,9 +161,8 @@
 
       {% for c in cursor %}
 
-      <div class="viewer-image-container">
+      <div class="viewer-image-container" id="focus-{{c.index}}">
         <img src="data:image/png;base64, {{c.image | safe}}" alt="Red dot" />
-
 
       <div>
         <div class='labels'>
@@ -144,7 +171,7 @@
           {% if label != 'corr' %}
 
           {% for class in range(5) %}
-            <div class="viewer-prediction-class {{'prediction-class-selected' if c.labels[label][class] == 1 else ''}} {{'prediction-class-corrected' if c.labels['corr'][class] == 1 else ''}}" onclick="correct_label('{{dataset.name}}', {{c.index}}, {{class}}, this)">
+            <div class="viewer-prediction-class label{{class}} {{'prediction-class-selected' if c.labels[label][class] == 1 else ''}} {{'prediction-class-corrected' if c.labels['corr'][class] == 1 else ''}}" onclick="correct_label('{{dataset.name}}', {{c.index}}, {{class}}, this)">
               {{'o' if c.labels[label][class] == 1 else '&nbsp;' | safe}}
               {{'c' if c.labels['corr'][class] == 1 else '' | safe}}
             </div>
@@ -157,6 +184,7 @@
 
       {{cursor.labels}}
     </div>
+
 
       </div>
 
