@@ -63,7 +63,7 @@
           Datasets
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {% for d in datasets %}
-            {% if d.name == dataset.name: %}
+            {% if dataset != None and d.name == dataset.name: %}
               <span>{{d.name}}</span>
             {% endif %}
           {% endfor %}
