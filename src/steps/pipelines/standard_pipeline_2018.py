@@ -46,7 +46,15 @@ from src.steps.core.datasets import DatasetStorage, DatasetInfo, OneDatasetInMem
 ###################################
 # LOAD DATASETS INFORMATION
 ###################################
-datasets_storage = DatasetStorage(pipeline_parameters["datasets_path"], ds_filter=None)
+
+# 0          axionaut-axionable_data          data/datasets\axionaut-axionable_data   (90, 250, 3)          26449                    26434
+# 1  axionaut-ironcar_data-new_track  data/datasets\axionaut-ironcar_data-new_track   (90, 250, 3)           1519                        0
+# 2  axionaut-ironcar_data-old_track  data/datasets\axionaut-ironcar_data-old_track   (90, 250, 3)          16028                        0
+# 3                     axionaut-new                     data/datasets\axionaut-new   (90, 250, 3)           3169                        0
+# 4            ironcar-friend-shared            data/datasets\ironcar-friend-shared  (150, 250, 3)           4074                        0
+# 5                   ironcar-shared                   data/datasets\ironcar-shared  (150, 250, 3)           4545                        0
+
+datasets_storage = DatasetStorage(pipeline_parameters["datasets_path"], ds_filter=["axionaut-axionable_data", "ironcar-shared"])
 datasets_infos = datasets_storage.get_datasets_infos()
 datasets = datasets_storage.get_datasets()
 
@@ -119,11 +127,11 @@ BATCH_SIZE = pipeline_parameters["BATCH_SIZE"]
 # FIT
 ###################################
 model.fit_generator(
-    generator = train_generator.sample_generator(BATCH_SIZE, shuffle=False, index_subset=index_train),
+    generator = train_generator.sample_generator(BATCH_SIZE, shuffle=False, index_subset=index_train, crop=crop_window),
     samples_per_epoch = num_train,
     nb_epoch  = pipeline_parameters["nb_epoch"],
     verbose = 1,
-    validation_data = test_generator.sample_generator(BATCH_SIZE, shuffle=False, index_subset=index_test),
+    validation_data = test_generator.sample_generator(BATCH_SIZE, shuffle=False, index_subset=index_test, crop=crop_window),
     nb_val_samples = num_valid,
     callbacks = [early_stop, checkpoint])
 
