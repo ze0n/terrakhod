@@ -1,4 +1,3 @@
-
 import numpy as np
 import re
 from os import listdir
@@ -10,6 +9,8 @@ import random
 import cv2
 from itertools import chain
 from itertools import islice
+import sys
+sys.path.append(".")
 
 def horizontal_flip(img, steer):
     """Horizontal image flipping and angle correction.
@@ -88,22 +89,6 @@ def adjust_gamma_dark(image, min_=0.7, max_=0.8):
     # apply gamma correction using the lookup table
     return cv2.LUT(image, table)
 
-def augment(image, steer):
-    
-    if np.random.random() > 0.75:
-        image = adjust_gamma_dark(image)
-    elif np.random.random() > 0.75:
-        image = night_effect(image)
-    elif np.random.random() > 0.75:
-        image = add_random_shadow(image)
-    elif np.random.random() > 0.75:
-        image = augment_brightness_camera_images(image)
-    elif np.random.random() > 0.75:
-        image = augment_brightness_camera_images(image)
-        image =  add_random_shadow(image)
-        image, steer = horizontal_flip(image, steer)
-                
-    return image, steer
 
 def batch_generator(file_names, batch_size):
     """
