@@ -6,6 +6,9 @@ import numpy as np
 import logging
 import os
 
+from src.steps.augumentation.augmentors import normalize
+
+
 class DatasetStorage:
     def __init__(self, path, ds_filter:List[str]=None):
         self.ds_filter = ds_filter
@@ -90,7 +93,12 @@ class OneDatasetInMemorySampleGenerator(SampleGenerator):
         return ret
 
 
-    def sample_generator(self, batch_size, shuffle=True, index_subset = None): # , jitter=True, norm=True):
+    def sample_generator(self, batch_size,
+                         shuffle=True,
+                         index_subset = None,
+                         norm=True,
+                         crop=None,
+                         crop_strategy="bottom center"): # , jitter=True, norm=True):
 
         if(index_subset != None):
             multi_dataset_index = index_subset
@@ -110,8 +118,24 @@ class OneDatasetInMemorySampleGenerator(SampleGenerator):
                 for dataset_name, dataset_index in batch:
                     image, steer = self.read_image_and_steering(dataset_name, dataset_index)
 
+                    if crop != None:
+                        height = crop[0]
+                        width = crop[1]
+                        cur_h = image.shape[0]
+                        cur_w = image.shape[1]
+
+                        if(crop_strategy == "bottom center"):
+                            #print(image.shape)
+                            assert(height <= cur_h and width <= cur_w)
+                            h0 = cur_h - height
+                            w0 = int((cur_w - width) / 2)
+                            image = image[h0:,w0:,:]
+                            #print(image.shape)
+
+                            #raise Exception("PO")
+
                     #if jitter: image, steer = augment(image, steer)
-                    #if norm:   image = normalize(image)
+                    if norm:   image = normalize(image)
 
                     batch_imgs.append(image)
                     batch_targets.append(steer)
