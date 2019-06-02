@@ -7,12 +7,18 @@ from PIL import Image
 import io
 import base64
 
+sys.path.append(".")
+sys.path.append("..\\..\\..\\..")
+
+from src.steps.core.datasets import Dataset
+
+
 # sys.path("../../..")
 # cwd = 
 
 import logging
 
-from src.steps.core.dataset import Dataset
+
 
 DATASETS_DIR = ""
 

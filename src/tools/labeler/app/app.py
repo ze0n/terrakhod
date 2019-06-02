@@ -1,12 +1,15 @@
 import os
 from flask import Flask
-import settings as SETTINGS
-from flask import render_template
 import sys
-sys.path.append("..")
+sys.path.append(".")
+sys.path.append("..\\..\\..\\..")
+
+from flask import render_template
+
 from flask import request
 
-import labeler as lr
+import src.tools.labeler.labeler as lr
+import src.tools.labeler.app.settings as SETTINGS
 
 import pandas as pd
 import logging
@@ -19,12 +22,14 @@ logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.ERROR)
 
 datasets_path = SETTINGS.PATHS["datasets"]
 
+print(os.path.join(".", datasets_path))
+
 Lr = lr.Labeler(datasets_path, 1)
 
 @app.route("/")
 @app.route("/info")
 def info():
-    return render_template('info.html', datasets=Lr.datasets)
+    return render_template('info.html', datasets=Lr.datasets, dataset=None)
 
 @app.route("/labeler")
 def labeler():
