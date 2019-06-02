@@ -1,4 +1,6 @@
 .vscode
+.idea
+.envtf1
 .envtf2
 *.pyc
 *.pyo
