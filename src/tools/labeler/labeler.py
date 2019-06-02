@@ -12,39 +12,9 @@ import base64
 
 import logging
 
+from src.steps.core.dataset import Dataset
+
 DATASETS_DIR = ""
-
-class Dataset:
-    def __init__(self, name, path):
-        self.path = path
-        self.name = name
-
-    def load(self):
-        self.X = np.load(os.path.join(self.path, 'X.npy'))
-        logging.info(os.path.join(self.path, 'X.npy') + " loaded")
-        self.Y = np.load(os.path.join(self.path, 'Y.npy'))
-        logging.info(os.path.join(self.path, 'Y.npy') + " loaded")
-
-        if(os.path.exists(os.path.join(self.path, 'C.npy'))):
-            self.C = np.load(os.path.join(self.path, 'C.npy'))
-            logging.info(os.path.join(self.path, 'C.npy') + " loaded")
-        else:
-            self.C = np.empty_like(self.Y)
-            self.C[:] = np.nan
-            logging.info(os.path.join(self.path, 'C.npy') + " created of nans")
-
-    def save(self):
-        np.save(os.path.join(self.path, 'X.npy'),self.X)
-        logging.info(os.path.join(self.path, 'X.npy') + " saved")
-        np.save(os.path.join(self.path, 'Y.npy'),self.Y)
-        logging.info(os.path.join(self.path, 'Y.npy') + " saved")
-        np.save(os.path.join(self.path, 'C.npy'),self.C)
-        logging.info(os.path.join(self.path, 'C.npy') + " saved")
-
-    def unload(self):
-        del self.X
-        del self.Y
-        del self.C
 
 class Labeler:
 
