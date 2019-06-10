@@ -1,0 +1,1 @@
+.envtf2\Scripts\activate

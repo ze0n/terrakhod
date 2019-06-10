@@ -1,0 +1,104 @@
+<!doctype html>
+<title>{% block title %}{% endblock %} - IronCar</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/spin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/spin.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+
+<script type="text/javascript">
+  var opts = {
+  lines: 13, // The number of lines to draw
+  length: 17, // The length of each line
+  width: 2, // The line thickness
+  radius: 12, // The radius of the inner circle
+  scale: 1.3, // Scales overall size of the spinner
+  corners: 1, // Corner roundness (0..1)
+  color: '#ffffff', // CSS color or array of colors
+  fadeColor: 'transparent', // CSS color or array of colors
+  speed: 1, // Rounds per second
+  rotate: 0, // The rotation offset
+  animation: 'spinner-line-fade-more', // The CSS animation name for the lines
+  direction: 1, // 1: clockwise, -1: counterclockwise
+  zIndex: 2e9, // The z-index (defaults to 2000000000)
+  className: 'spinner', // The CSS class to assign to the spinner
+  top: '51%', // Top position relative to parent
+  left: '50%', // Left position relative to parent
+  shadow: '0 0 1px transparent', // Box-shadow for the lines
+  position: 'absolute' // Element positioning
+};
+
+</script>
+
+<link rel="icon" type="image/png" href="/static/favicon.png" />
+{% block imports %}{% endblock %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/">IronCar &mdash; Labeler</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/info">Home</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/labeler">Labeler</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/viewer">Viewer</a>
+      </li>
+
+      <li class="nav-item">
+      </li>
+
+      <li class="nav-item dropdown">
+        <div class='info'>
+          Datasets
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {% for d in datasets %}
+            {% if dataset != None and d.name == dataset.name: %}
+              <span>{{d.name}}</span>
+            {% endif %}
+          {% endfor %}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+            {% for d in datasets %}
+              <a class="dropdown-item {{'selected' if d.name == dataset.name else ''}}" href="#" onclick="change_dataset('{{d.name}}')">{{d.name}}</a>
+            {% endfor %}
+
+        </div>
+        </div>
+      </li>
+
+
+      {% block nav %}{% endblock %} 
+
+<!--       <li>
+        <h3>Datasets</h3>
+        <ul class="datasets_list">
+        {% for d in datasets %}
+          <li class="{{'selected' if d.name == dataset.name else ''}}">
+            <a class="dataset" href="#" onclick="change_dataset('{{d.name}}')">{{d.name}}</a>
+          </li>
+        {% endfor %}
+        </ul>
+      </li>
+ -->
+    </ul>
+  </div>
+</nav>
+
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% block content %}{% endblock %}
+</section>

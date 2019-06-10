@@ -1,0 +1,3 @@
+PATHS = {
+    "datasets": "..\\..\\..\\..\\data\\datasets"
+}

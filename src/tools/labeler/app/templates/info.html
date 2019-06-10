@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+ {% endblock %}
+
+{% block content %}
+
+  <div class="myList">
+    <h1>{% block title %}Datasets{% endblock %}</h1>
+    <ul>
+    {% for dataset in datasets %}
+    <li>
+        <h3>{{dataset.name}}</h3>
+        <p><b>Path: </b><span>{{dataset.path}}</span></p>
+        <p><span>{{dataset.description  | replace('\n', ' ')}}</span></p>
+
+    </li>
+    {% endfor %}
+  </ul>
+  </div>
+{% endblock %}
