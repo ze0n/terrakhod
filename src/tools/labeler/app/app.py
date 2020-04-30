@@ -33,20 +33,28 @@ def info():
 
 @app.route("/labeler")
 def labeler():
-
-    Lr.cursor_size = 1
-    #Lr.current_position = 0
-    Lr.cursor_next(True)
-
+    # Lr.cursor_size = 1
+    # Lr.cursor_next(True)
     context = {
         "datasets": Lr.datasets,
         "dataset": Lr.dataset,
         "cursor_current": Lr.current_position,
         "cursor": Lr.cursor_render()
     }
-
     return render_template('labeler.html', **context)
 
+@app.route("/labeler/init")
+def labeler_init():
+    Lr.cursor_size = 1
+    #Lr.current_position = 0
+    Lr.cursor_next(True)
+    context = {
+        "datasets": Lr.datasets,
+        "dataset": Lr.dataset,
+        "cursor_current": Lr.current_position,
+        "cursor": Lr.cursor_render()
+    }
+    return render_template('labeler.html', **context)
 
 @app.route("/labeler/change_dataset")
 def action_change_dataset():
@@ -70,7 +78,6 @@ def save():
     Lr.save()
     return "ok"
 
-
 @app.route("/labeler/correct_label")
 def correct_label():
     dataset = request.args.get('dataset')
@@ -78,7 +85,6 @@ def correct_label():
     newLabel = int(request.args.get('newLabel'))
     Lr.correct_label(dataset, imageIndex, newLabel)
     return "OK"
-
 
 @app.route("/viewer")
 def viewer():

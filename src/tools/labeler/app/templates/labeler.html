@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-  <script type="text/javascript">
+<script type="text/javascript">
     document.addEventListener('keydown', (event) => {
       const keyName = event.key;
 
@@ -17,6 +17,20 @@
 
     }, false);
 
+    function correct_label(imageIndex, newLabel){
+       $.ajax
+        ({
+            type: "GET",
+            url: "/labeler/correct_label?imageIndex="+imageIndex+"&newLabel="+newLabel,
+            async: true,
+            success: function () {
+              window.location.assign("/labeler")
+              // var target = document.getElementById('contento');
+              // var spinner = new Spinner(opts).spin(target);
+            }
+        });
+    }
+
     function cursor_next(){
        $.ajax
         ({
@@ -25,8 +39,8 @@
             async: true,
             success: function () {
               window.location.assign("/labeler")
-              var target = document.getElementById('contento');
-              var spinner = new Spinner(opts).spin(target);
+              // var target = document.getElementById('contento');
+              // var spinner = new Spinner(opts).spin(target);
             }
         });
     }
@@ -39,8 +53,8 @@
             async: true,
             success: function () {
               window.location.assign("/labeler")
-              var target = document.getElementById('contento');
-              var spinner = new Spinner(opts).spin(target);
+              // var target = document.getElementById('contento');
+              // var spinner = new Spinner(opts).spin(target);
             }
         });
     }
@@ -53,81 +67,91 @@
             async: true,
             success: function () {
               window.location.assign("/labeler")
-              var target = document.getElementById('contento');
-              var spinner = new Spinner(opts).spin(target);
+              // var target = document.getElementById('contento');
+              // var spinner = new Spinner(opts).spin(target);
             }
         });
     }
-  </script>
 
-  <div class="container-fluid">
-  <div class="row" style="height: 100%">
-    <div class="col-md-3 myNavigation" style="height: 100%">
-      <h3>Datasets</h3>
-      <ul class="datasets_list">
-        {% for d in datasets %}
-          <li class="{{'selected' if d.name == dataset.name else ''}}">
-            <a class="dataset" href="#" onclick="change_dataset('{{d.name}}')">{{d.name}}</a>
-          </li>
-        {% endfor %}
-      </ul>
 
-      <h3>Dataset info</h3>
-      <p>Samples: <b>{{dataset.X | length}}</b></p>
-      <p>Size: <b>{{dataset.X.shape[1]}} x {{dataset.X.shape[2]}}</b></p>
 
-    </div>
-    <div class="col-md-9" id="contento">
 
-      <div class="image-container">
-        <img src="data:image/png;base64, {{cursor.image | safe}}" alt="Red dot" />
-      </div>
+</script>
 
-      <div style="text-align: center;">
-        <h3>Cursor</h3>
-        <div class="cursor">
-          <a onclick="cursor_prev()" class="btn btn-primary">&larr; Prev</a>
-          <span class="current">{{cursor_current}}</span>
-          <a onclick="cursor_next()" class="btn btn-primary">Next &rarr;</a>
+<div class="container">
+    <div class="row" style="padding-top: 30px;">
+        <div class="col-md-3 myNavigation" style="height: 100%">
+            <h3>Datasets</h3>
+            <ul class="datasets_list">
+                {% for d in datasets %}
+                <li class="{{'selected' if d.name == dataset.name else ''}}">
+                    <a class="dataset" href="#" onclick="change_dataset('{{d.name}}')">{{d.name}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <h3>Dataset info</h3>
+            <p>Samples: <b>{{dataset.X | length}}</b></p>
+            <p>Size: <b>{{dataset.X.shape[1]}} x {{dataset.X.shape[2]}}</b></p>
+
         </div>
-      </div>      
 
-      <div>
-        <h1>Labels</h1>
+        <div class="col-md-9" id="contento">
 
-        {% for label in cursor.labels %}
-        <h3 style="text-align: center;">{{label}}</h3>
-        <div class='labels'>
-          {% for class in range(5) %}
-
-          {% if label == 'corr' %}
-            <a class="btn btn-mini prediction-class {{'prediction-class-selected' if cursor.labels[label][class] == 1 else ''}}">
-              {{('&larr;&larr;' if class == 0) | safe}}
-              {{('&larr;' if class == 1) | safe}}
-              {{('-' if class == 2) | safe}}
-              {{('&rarr;' if class == 3) | safe}}
-              {{('&rarr;&rarr;' if class == 4) | safe}}
-            </a>
-          {% else %}
-            <div class="prediction-class {{'prediction-class-selected' if cursor.labels[label][class] == 1 else ''}}">
-              {{('&larr;&larr;' if class == 0) | safe}}
-              {{('&larr;' if class == 1) | safe}}
-              {{('-' if class == 2) | safe}}
-              {{('&rarr;' if class == 3) | safe}}
-              {{('&rarr;&rarr;' if class == 4) | safe}}
+            <div class="image-container">
+                <img class="oneframe" src="data:image/png;base64, {{cursor.image | safe}}" alt="Red dot"/>
             </div>
-          {% endif %}
-          {% endfor %}
+
+            <div style="text-align: center;">
+                <h3>Cursor</h3>
+                <div class="cursor">
+                    <a onclick="cursor_prev()" class="btn btn-primary"><i class="myarrow fa fa-arrow-left"> </i></a>
+                    <span class="current">{{cursor_current}}</span>
+                    <a onclick="cursor_next()" class="btn btn-primary"><i class="myarrow fa fa-arrow-right"> </i></a>
+                </div>
+            </div>
+
+            <div>
+                <h1>Labels</h1>
+
+                {% for label in cursor.labels %}
+                <h3 style="text-align: middle;">{{label}}</h3>
+                <div class='labels'>
+                    {% for class in range(5) %}
+                    {% if label == 'corr' %}
+                    <a onclick="cursor_prev()" class="btn btn-mini prediction-class {{'prediction-class-selected' if cursor.labels[label][class] == 1 else ''}}">
+                        {{('<i class="myarrow fa fa-arrow-left"> </i><i class="myarrow fa fa-arrow-left"> </i>' if class
+                        == 0) | safe}}
+                        {{('<i class="myarrow fa fa-arrow-left"> </i>' if class == 1) | safe}}
+                        {{('<i class="myarrow fa fa-arrow-up"> </i>' if class == 2) | safe}}
+                        {{('<i class="myarrow fa fa-arrow-right"> </i>' if class == 3) | safe}}
+                        {{('<i class="myarrow fa fa-arrow-right"> </i><i class="myarrow fa fa-arrow-right"> </i>' if
+                        class == 4) | safe}}
+                    </a>
+                    {% else %}
+                    <div class="prediction-class {{'prediction-class-selected' if cursor.labels[label][class] == 1 else ''}}">
+                        {{('<i class="myarrow fa fa-arrow-left"> </i><i class="myarrow fa fa-arrow-left"> </i>' if class
+                        == 0) | safe}}
+                        {{('<i class="myarrow fa fa-arrow-left"> </i>' if class == 1) | safe}}
+                        {{('<i class="myarrow fa fa-arrow-up"> </i>' if class == 2) | safe}}
+                        {{('<i class="myarrow fa fa-arrow-right"> </i>' if class == 3) | safe}}
+                        {{('<i class="myarrow fa fa-arrow-right"> </i><i class="myarrow fa fa-arrow-right"> </i>' if
+                        class == 4) | safe}}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <br/>
+                {% endfor %}
+
+                {{cursor.labels}}
+            </div>
+            }
+
         </div>
-        {% endfor %}
-
-      {{cursor.labels}}</div>
-        }
-
     </div>
-  </div>
 
 
-  </div>
-  
+</div>
+
 {% endblock %}

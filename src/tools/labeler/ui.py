@@ -4,7 +4,6 @@ from tkinter.ttk import *
 #window = Tk()
 #window.mainloop()
 
-
 class FullScreenApp(object):
     def __init__(self, master, **kwargs):
         self.master=master
@@ -34,14 +33,11 @@ class FullScreenApp(object):
 
         Separator(orient="vertical").grid(column=1)
 
-
-
     def toggle_geom(self,event):
         geom=self.master.winfo_geometry()
         print(geom,self._geom)
         self.master.geometry(self._geom)
         self._geom=geom
-
 
 class Fullscreen_Window:
 
@@ -78,7 +74,6 @@ class Fullscreen_Window:
 
         Can1 = Canvas(FMas, bg="Yellow")
         Can1.grid(row=1, column=0, sticky=(N,W))
-
 
     def __init__(self):
         self.tk = Tk()

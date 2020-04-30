@@ -92,6 +92,7 @@ h3 { font-size: 18px; font-weight: bold; }
 
 .myNavigation {
     background-color: #EEE;
+    padding-top: 20px;
 }
 
 .datasets_list {
@@ -115,6 +116,8 @@ a.dataset {
 
 .cursor .current {
     font-weight: bold;
+    font-size: 24px;
+    padding: 10px;
     min-width: 50px;
 }
 
@@ -126,8 +129,12 @@ a.dataset {
 
 .image-container {
     padding: 50px;
-    background-color: #EEE;
+    background-color: #000;
     text-align: center;
+}
+
+.oneframe {
+    border: solid 2px #666;
 }
 
 .prediction-class {
@@ -173,14 +180,24 @@ h3 {
     padding: 5px;
 }
 
-
+.myarrow{
+    color: white;
+}
 
 .info {
     color: white;
+    padding: 8px 0px;
+    padding-left: 24px;
 }
 
 
 .focus {
     border: solid 4px orange;
     padding: 0px;
+}
+
+#contento {
+    padding: 0px 50px;
+    padding-top: 0px;
+
 }

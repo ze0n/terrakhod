@@ -65,11 +65,10 @@ class Labeler:
         for d in self.datasets:
             self.datasets_indexed[d["name"]] = d
 
-        
         self.dataset = None
 
         if(len(self.datasets) == 0):
-            raise Error("No datasets were found")
+            raise Exception("No datasets were found")
 
         self.select_dataset(self.datasets[0]["name"])
         
@@ -81,22 +80,32 @@ class Labeler:
 
     def cursor_next(self, first=False):
         index = np.arange(self.dataset.X.shape[0])
-
-        if(self.cursor_mode == "random"):
-            self.cursor = index.shufle(self.cursor_size)
-
-        elif(self.cursor_mode == "continious"):
-            if(not first):
-                self.current_position += self.cursor_size
-            self.cursor = index[self.current_position:self.current_position + self.cursor_size]
-        else:
-            raise "Error"
+        print("History Before:", self.cursor_history)
 
         self.cursor_history.append(self.current_position)
 
+        if(self.cursor_mode == "random"):
+            self.cursor = index.shufle(self.cursor_size)
+            self.current_positio = self.cursor[0]
+        elif(self.cursor_mode == "continious"):
+            if(not first):
+                self.current_position += self.cursor_size
+            self.cursor = index[self.current_position : self.current_position + self.cursor_size]
+        else:
+            raise Exception("Error")
 
-    def cursor_prev(self, first=False):
-        pass
+        print("History After:", self.cursor_history)
+        return self.cursor
+
+    def cursor_prev(self):
+        index = np.arange(self.dataset.X.shape[0])
+        print("History Before:", self.cursor_history)
+        self.current_position = self.cursor_history[-1]
+        self.cursor = index[self.current_position : self.current_position + self.cursor_size]
+        if(len(self.cursor_history) > 1):
+            self.cursor_history = self.cursor_history[:-1]
+        print("History After:", self.cursor_history)
+        return self.cursor
 
     def cursor_render(self):
         if(self.cursor_size == 1):
