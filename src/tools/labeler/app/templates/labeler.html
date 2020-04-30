@@ -4,6 +4,12 @@
 
 {% endblock %}
 
+{% block nav %}
+  <li class="nav-item">
+    <a class="btn btn-primary" href="#" onclick="save_dataset()">Save</a>
+  </li>
+{% endblock %}
+
 {% block content %}
 <script type="text/javascript">
     document.addEventListener('keydown', (event) => {
@@ -74,8 +80,17 @@
     }
 
 
-
-
+    function save_dataset(){
+       $.ajax
+        ({
+            type: "GET",
+            url: '/labeler/save',
+            async: false,
+            success: function () {
+              alert("Saved");
+            }
+        });
+    }
 </script>
 
 <div class="container">
@@ -119,7 +134,7 @@
                 <div class='labels'>
                     {% for class in range(5) %}
                     {% if label == 'corr' %}
-                    <a onclick="cursor_prev()" class="btn btn-mini prediction-class {{'prediction-class-selected' if cursor.labels[label][class] == 1 else ''}}">
+                    <a onclick="correct_label({{cursor_current}}, {{class}})" class="btn btn-mini prediction-class {{'prediction-class-selected' if cursor.labels[label][class] == 1 else ''}}">
                         {{('<i class="myarrow fa fa-arrow-left"> </i><i class="myarrow fa fa-arrow-left"> </i>' if class
                         == 0) | safe}}
                         {{('<i class="myarrow fa fa-arrow-left"> </i>' if class == 1) | safe}}
@@ -129,7 +144,7 @@
                         class == 4) | safe}}
                     </a>
                     {% else %}
-                    <div class="prediction-class {{'prediction-class-selected' if cursor.labels[label][class] == 1 else ''}}">
+                    <div class="prediction-class initial_label {{'prediction-class-selected' if cursor.labels[label][class] == 1 else ''}}">
                         {{('<i class="myarrow fa fa-arrow-left"> </i><i class="myarrow fa fa-arrow-left"> </i>' if class
                         == 0) | safe}}
                         {{('<i class="myarrow fa fa-arrow-left"> </i>' if class == 1) | safe}}

@@ -33,7 +33,19 @@
   position: 'absolute' // Element positioning
 };
 
-
+    function change_dataset(dataset){
+       $.ajax
+        ({
+            type: "GET",
+            url: '/labeler/change_dataset?dataset='+dataset,
+            async: true,
+            success: function () {
+              window.location.assign("/viewer")
+              var target = document.getElementById('contento');
+              var spinner = new Spinner(opts).spin(target);
+            }
+        });
+    }
 </script>
 
 <link rel="icon" type="image/png" href="/static/favicon.png"/>
@@ -83,7 +95,6 @@
 
                 </div>
             </li>
-
 
             {% block nav %}{% endblock %}
 

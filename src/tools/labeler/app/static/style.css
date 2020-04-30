@@ -155,7 +155,7 @@ a.dataset {
 }
 
 .prediction-class-selected {
-    background-color: red;
+    background-color: red !important;
 }
 
 .prediction-class-corrected {
@@ -188,6 +188,10 @@ h3 {
     color: white;
     padding: 8px 0px;
     padding-left: 24px;
+}
+
+.initial_label {
+    background-color: #AAA;
 }
 
 
