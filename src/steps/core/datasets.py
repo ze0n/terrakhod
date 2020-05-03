@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from itertools import islice, chain
 from typing import List
 
+import pandas as pd
 import numpy as np
 import logging
 import os
@@ -194,10 +195,22 @@ class Dataset:
         if(os.path.exists(os.path.join(self.path, 'C.npy'))):
             self.C = np.load(os.path.join(self.path, 'C.npy'))
             logging.info(os.path.join(self.path, 'C.npy') + " loaded")
+
+            cond = (self.C != -2147483648).any(axis=1)
+            cond = pd.Series(cond)
+            Ym = pd.DataFrame(self.Y)
+            Cm = pd.DataFrame(self.C)
+            self.Ym = Ym.mask(cond, Cm).values
+
+            logging.info(f"Corrected Y matrix created (Ym), {np.count_nonzero(cond)} records have been patched")
+
         else:
             self.C = np.empty_like(self.Y)
             self.C[:] = np.nan
             logging.info(os.path.join(self.path, 'C.npy') + " created of nans")
+
+            self.Ym = self.Y
+            logging.info(f"Corrected Y matrix created (Ym) as a copy of Y, no records have been patched")
 
     def save(self):
         np.save(os.path.join(self.path, 'X.npy'),self.X)
@@ -211,5 +224,6 @@ class Dataset:
         del self.X
         del self.Y
         del self.C
+        del self.Ym
 
 
